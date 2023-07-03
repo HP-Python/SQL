@@ -1,11 +1,17 @@
 import pyperclip
 
+# 从剪贴板导入数据库
+# 从数据库导入剪贴板
 def get_clipboard():
     return pyperclip.paste()
 
 def get_database(helper):
     sql = "SELECT PREFIX, ITEM_NAME FROM ITEM_COLLECT"
     return helper.fetch(sql)
+
+def get_item_collect(helper):
+    sql = "SELECT ITEM_NAME FROM ITEM_COLLECT"
+    return [row[0] for row in helper.fetch(sql)]
 
 def reform_clipboard(clip):
     result = []
@@ -35,6 +41,10 @@ def database_clipboard(helper):
     text = reform_database(datas)
     pyperclip.copy(text)
 
+def database_clipboard_noForm(helper):
+    ret = get_item_collect(helper)
+    pyperclip.copy("\n".join(ret))
+
 def clipboard_database(helper):
     clip = get_clipboard()
     datas = reform_clipboard(clip)
@@ -56,4 +66,4 @@ def clipboard_database(helper):
 if __name__ == "__main__":
     from db import HELPER
     helper = HELPER()
-    clipboard_database(helper)
+    database_clipboard_noForm(helper)
