@@ -8,6 +8,7 @@ class HELPER:
     def __init__(self) -> None:
         self.conn = None
         self.cur = None
+
     def connect(self):
         while True:
             try:
@@ -21,20 +22,24 @@ class HELPER:
             except Exception as e:
                 time.sleep(0.5)
                 print(e)
+
     def close(self):
         self.cur.close()
         self.conn.close()
+
     def execute(self, sql):
         self.connect()
         self.cur.execute(sql)
         self.conn.commit()
         self.close()
+
     def fetch(self, sql):
         self.connect()
         self.cur.execute(sql)
         result = self.cur.fetchall()
         self.close()
         return result
+
     def fetch_one(self, sql):
         self.connect()
         self.cur.execute(sql)

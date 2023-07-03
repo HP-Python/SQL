@@ -66,4 +66,4 @@ def clipboard_database(helper):
 if __name__ == "__main__":
     from db import HELPER
     helper = HELPER()
-    database_clipboard_noForm(helper)
+    clipboard_database(helper)
