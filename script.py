@@ -32,18 +32,23 @@ def reform_database(datas):
 
 def database_clipboard(helper):
     datas = get_database(helper)
-    print(datas)
     text = reform_database(datas)
-    print(text)
     pyperclip.copy(text)
 
 def clipboard_database(helper):
     clip = get_clipboard()
     datas = reform_clipboard(clip)
     helper.connect()
+    sql = "DROP TABLE IF EXISTS ITEM_COLLECT"
+    helper.cur.execute(sql)
+    sql = """
+        CREATE TABLE ITEM_COLLECT (
+        ID INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+        PREFIX VARCHAR(50) NOT NULL,
+        ITEM_NAME VARCHAR(20) NOT NULL);
+        """
+    helper.cur.execute(sql)
     sql = "INSERT INTO ITEM_COLLECT (PREFIX, ITEM_NAME) VALUES (%s, %s)"
-    for row in datas:
-        print(row)
     helper.cur.executemany(sql, datas)
     helper.conn.commit()
     helper.close()
@@ -51,5 +56,4 @@ def clipboard_database(helper):
 if __name__ == "__main__":
     from db import HELPER
     helper = HELPER()
-    # clipboard_database(helper)
-    database_clipboard(helper)
+    clipboard_database(helper)
